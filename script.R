@@ -14,12 +14,6 @@
 # before loading them)
 library(readr)
 library(scatterplot3d) 
-library(readxl)
-
-library(rgl)
-library(car) 
-
-library(MASS)
 library(ggplot2)
 
 # 2. - Dataset------------------------------------------------------------------
