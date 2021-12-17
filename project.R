@@ -1,12 +1,13 @@
 ################################################################################
 # Authors: Martin Clément, Patrice Stampfli, Sander van den Bogaert
-# Date: 11.12.2021
+# Date: 17.12.2021
 # Description: Project paper
 ################################################################################
 # 1. - Packages
 # 2. - Dataset
-# 3. - Linear model 
-# 4. - Visualization
+# 3. - Tidy Data
+# 4. - Linear model 
+# 5. - Model
 
 
 # 1. - Packages-----------------------------------------------------------------
@@ -23,13 +24,19 @@ library(car)
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 initial_data <- read.csv('BodyFat.csv')
 
-View(initial_data)
-
-
-# 3. - Linear model
 # attach the model
 attach(initial_data)
 
+# 3. - Tidy data----------------------------------------------------------------
+# convert lbs to kg
+initial_data$WEIGHT <- initial_data$WEIGHT *  0.45359237
+
+# convert inches to cm
+initial_data$HEIGHT <- initial_data$HEIGHT *  2.54
+
+View(initial_data)
+
+# 4. - Linear model-------------------------------------------------------------
 #plot the bodyfat according to the age
 plot(BODYFAT ~ AGE)
 # make a linear model to predict bodyfat from age
@@ -39,19 +46,13 @@ abline(m1)
 # Age is responsible for this amount of the variation
 summary(m1)$r.squared
 
-
-
-
-# 4. Model according to age and weight
+# 5. Model according to age and weight------------------------------------------
 # plot the bodyfat according to the age and weight
 scatter3d(x=AGE, z=BODYFAT, y=WEIGHT, surface=TRUE)
 # make a linear model to predict bodyfat from age and weight
 m2 <- lm(BODYFAT ~ AGE + WEIGHT)
 # Age and weight together account for this amount of the variation
 summary(m2)$adj.r.squared
-
-
-
 
 # 5. full model
 # make a linear model to predict bodyfat from all the variables
