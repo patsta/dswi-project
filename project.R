@@ -35,6 +35,8 @@ initial_data$WEIGHT <- initial_data$WEIGHT *  0.45359237
 initial_data$HEIGHT <- initial_data$HEIGHT *  2.54
 
 View(initial_data)
+# Variation in the original data
+var(BODYFAT)
 
 # 4. - Linear model-------------------------------------------------------------
 #plot the bodyfat according to the age
@@ -45,6 +47,8 @@ m1 <- lm(BODYFAT ~ AGE)
 abline(m1)
 # Age is responsible for this amount of the variation
 summary(m1)$r.squared
+# Variation after adjusting for age
+var(mean(BODYFAT)+m1$residuals)
 
 # 5. Model according to age and weight------------------------------------------
 # plot the bodyfat according to the age and weight
@@ -53,6 +57,10 @@ scatter3d(x=AGE, z=BODYFAT, y=WEIGHT, surface=TRUE)
 m2 <- lm(BODYFAT ~ AGE + WEIGHT)
 # Age and weight together account for this amount of the variation
 summary(m2)$adj.r.squared
+# Summary of both variables and their contribution to the model
+summary(m2)
+# Variation after adjusting for age and weight
+var(mean(BODYFAT)+m2$residuals)
 
 # 5. full model
 # make a linear model to predict bodyfat from all the variables
