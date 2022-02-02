@@ -18,14 +18,12 @@ library(scatterplot3d)
 library(ggplot2)
 library(rgl)
 library(car) 
+library(tidyverse)
 
 # 2. - Dataset------------------------------------------------------------------
 # import data
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 initial_data <- read.csv('BodyFat.csv')
-
-# attach the model
-attach(initial_data)
 
 # 3. - Tidy data----------------------------------------------------------------
 # convert lbs to kg
@@ -34,9 +32,17 @@ initial_data$WEIGHT <- initial_data$WEIGHT *  0.45359237
 # convert inches to cm
 initial_data$HEIGHT <- initial_data$HEIGHT *  2.54
 
+initial_data <- mutate(initial_data, BMI = WEIGHT / HEIGHT^2 *10000)
+
+initial_data <- filter(initial_data, HEIGHT > 140)
+
 View(initial_data)
+
+attach(initial_data)
+
 # Variation in the original data
 var(BODYFAT)
+
 
 # 4. - Linear model-------------------------------------------------------------
 #plot the bodyfat according to the age
@@ -45,10 +51,30 @@ plot(BODYFAT ~ AGE)
 m1 <- lm(BODYFAT ~ AGE)
 # plot the prediction on the graph
 abline(m1)
-# Age is responsible for this amount of the variation
-summary(m1)$r.squared
 # Variation after adjusting for age
 var(mean(BODYFAT)+m1$residuals)
+# Age is responsible for this amount of the variation
+summary(m1)$r.squared
+
+
+# 5. Linear model: BMI-----------------------------------------------------
+# plot the bodyfat according to the BMI
+plot(BODYFAT ~ BMI)
+# make a linear model to predict bodyfat from age
+m1 <- lm(BODYFAT ~ BMI)
+# plot the prediction on the graph
+abline(m1)
+# Variation after adjusting for BMI
+var(mean(BODYFAT)+m1$residuals)
+# BMI is responsible for this amount of the variation
+summary(m1)$r.squared
+
+
+
+
+
+
+
 
 # 5. Model according to age and weight------------------------------------------
 # plot the bodyfat according to the age and weight
@@ -61,6 +87,7 @@ summary(m2)$adj.r.squared
 summary(m2)
 # Variation after adjusting for age and weight
 var(mean(BODYFAT)+m2$residuals)
+
 
 # 5. full model
 # make a linear model to predict bodyfat from all the variables
