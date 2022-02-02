@@ -32,19 +32,22 @@ initial_data$WEIGHT <- initial_data$WEIGHT *  0.45359237
 # convert inches to cm
 initial_data$HEIGHT <- initial_data$HEIGHT *  2.54
 
+# add column BMI to the table
 initial_data <- mutate(initial_data, BMI = WEIGHT / HEIGHT^2 *10000)
 
+# check for special cases
 initial_data <- filter(initial_data, HEIGHT > 140)
 
-View(initial_data)
-
+# attach the dataset
 attach(initial_data)
+View(initial_data)
 
 # Variation in the original data
 var(BODYFAT)
 
 
-# 4. - Linear model-------------------------------------------------------------
+# 4. - Linear models------------------------------------------------------------
+# 4.1 - Age
 #plot the bodyfat according to the age
 plot(BODYFAT ~ AGE)
 # make a linear model to predict bodyfat from age
@@ -55,63 +58,86 @@ abline(m1)
 var(mean(BODYFAT)+m1$residuals)
 # Age is responsible for this amount of the variation
 summary(m1)$r.squared
+# Summary of AGE and the contribution to the model
+summary(m2)
 
 
-# 5. Linear model: BMI-----------------------------------------------------
-# plot the bodyfat according to the BMI
-plot(BODYFAT ~ BMI)
-# make a linear model to predict bodyfat from age
-m1 <- lm(BODYFAT ~ BMI)
-# plot the prediction on the graph
-abline(m1)
-# Variation after adjusting for BMI
-var(mean(BODYFAT)+m1$residuals)
-# BMI is responsible for this amount of the variation
-summary(m1)$r.squared
-
-
-
-
-
-
-
-
-# 5. Model according to age and weight------------------------------------------
+# 4.2 - Age and weight
 # plot the bodyfat according to the age and weight
 scatter3d(x=AGE, z=BODYFAT, y=WEIGHT, surface=TRUE)
 # make a linear model to predict bodyfat from age and weight
 m2 <- lm(BODYFAT ~ AGE + WEIGHT)
-# Age and weight together account for this amount of the variation
-summary(m2)$adj.r.squared
-# Summary of both variables and their contribution to the model
-summary(m2)
 # Variation after adjusting for age and weight
 var(mean(BODYFAT)+m2$residuals)
+# Age and weight together account for this amount of the variation
+summary(m2)$r.squared
+# Summary of both variables and their contribution to the model
+summary(m2)
 
 
-# 5. full model
-# make a linear model to predict bodyfat from all the variables
-m3 <- lm(BODYFAT ~ ., data = initial_data)
-# how much variation is there between the prediction and the actual value
-var(m3$residuals)
-# All data together accounts for this amount of the variation
-summary(m3)$adj.r.squared
-# Summary of all the variables and their contribution to the model
+# 4.3 - BMI
+# plot the bodyfat according to the BMI
+plot(BODYFAT ~ BMI)
+# make a linear model to predict bodyfat from age
+m3 <- lm(BODYFAT ~ BMI)
+# plot the prediction on the graph
+abline(m3)
+# Variation after adjusting for BMI
+var(mean(BODYFAT)+m3$residuals)
+# BMI is responsible for this amount of the variation
+summary(m3)$r.squared
+# Summary of BMI and the contribution to the model
 summary(m3)
 
 
-# Model for density
-m4 <- lm(BODYFAT ~ DENSITY)
-# Density accounts for this amount of the variation
-summary(m4)$adj.r.squared
+# 4.4 - BMI and age
+# plot the bodyfat according to the BMI and AGE
+scatter3d(x=AGE, z=BODYFAT, y=BMI, surface=FALSE)
+# make a linear model to predict bodyfat from age
+m4 <- lm(BODYFAT ~ BMI + AGE)
+# plot the prediction on the graph
+abline(m4)
+# Variation after adjusting for BMI
+var(mean(BODYFAT)+m4$residuals)
+# BMI is responsible for this amount of the variation
+summary(m4)$r.squared
+# Summary of both variables and their contribution to the model
+summary(m4)
 
-# 6. Full model without Density
-# linear model to predict body from all the variables except Density
-m5 <- lm(BODYFAT ~ . -DENSITY, data = initial_data)
+
+# 4.5 - Full model
+# make a linear model to predict bodyfat from all the variables
+m5 <- lm(BODYFAT ~ ., data = initial_data)
 # how much variation is there between the prediction and the actual value
-var(m5$residuals)
-# The model accounts for this amount of the variation
-summary(m5)$adj.r.squared
+var(mean(BODYFAT)+m5$residuals)
+# All data together accounts for this amount of the variation
+summary(m5)$r.squared
 # Summary of all the variables and their contribution to the model
 summary(m5)
+
+
+# 4.6 - Density
+# plot the bodyfat according to the Density
+plot(BODYFAT ~ DENSITY)
+# make a linear model to predict bodyfat from DENSITY
+m6 <- lm(BODYFAT ~ DENSITY)
+# plot the prediction on the graph
+abline(m6)
+# Variation after adjusting for BMI
+var(mean(BODYFAT)+m6$residuals)
+# DENSITY is responsible for this amount of the variation
+summary(m6)$r.squared
+# Summary of BMI and the contribution to the model
+summary(m6)
+
+
+# 4.7 - Full model without Density
+# linear model to predict body from all the variables except Density
+m7 <- lm(BODYFAT ~ . -DENSITY, data = initial_data)
+# how much variation is there between the prediction and the actual value
+var(mean(BODYFAT) + m7$residuals)
+# The model accounts for this amount of the variation
+summary(m7)$r.squared
+# Summary of all the variables and their contribution to the model
+summary(m7)
 
