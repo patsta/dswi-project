@@ -59,7 +59,7 @@ var(mean(BODYFAT)+m1$residuals)
 # Age is responsible for this amount of the variation
 summary(m1)$r.squared
 # Summary of AGE and the contribution to the model
-summary(m2)
+summary(m1)
 
 
 # 4.2 - Age and weight
