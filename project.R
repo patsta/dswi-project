@@ -123,11 +123,30 @@ plot(BODYFAT ~ DENSITY)
 m6 <- lm(BODYFAT ~ DENSITY)
 # plot the prediction on the graph
 abline(m6)
-# Variation after adjusting for BMI
+# Variation after adjusting for DENSITY
 var(mean(BODYFAT)+m6$residuals)
 # DENSITY is responsible for this amount of the variation
 summary(m6)$r.squared
-# Summary of BMI and the contribution to the model
+# Summary of DENSITY and the contribution to the model
+summary(m6)
+
+
+# Model for density without wrong points
+# removing the wrong lines
+initial_data <- filter(initial_data, IDNO != 48)
+initial_data <- filter(initial_data, IDNO != 96)
+attach(initial_data)
+# plot the bodyfat according to the Density
+plot(BODYFAT ~ DENSITY)
+# make a linear model to predict bodyfat from DENSITY
+m6 <- lm(BODYFAT ~ DENSITY)
+# plot the prediction on the graph
+abline(m6)
+# Variation after adjusting for DENSITY
+var(mean(BODYFAT)+m6$residuals)
+# DENSITY is responsible for this amount of the variation
+summary(m6)$r.squared
+# Summary of DENSITY and the contribution to the model
 summary(m6)
 
 
