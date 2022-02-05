@@ -1,14 +1,12 @@
 ################################################################################
 # Authors: Martin Clément, Patrice Stampfli, Sander van den Bogaert
-# Date: 17.12.2021
+# Date: 05.02.2022
 # Description: Project paper
 ################################################################################
 # 1. - Packages
 # 2. - Dataset
 # 3. - Tidy Data
 # 4. - Linear model 
-# 5. - Model
-
 
 # 1. - Packages-----------------------------------------------------------------
 # Packages used in this research (You may need to install the packages 
